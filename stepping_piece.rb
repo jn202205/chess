@@ -12,18 +12,26 @@ class SteppingPiece < Piece
   end
 
   def get_diffs
-    OFFSETS
+    offsets
   end
 end
 
 class Knight < SteppingPiece
-  OFFSETS = [[-2, -1], [-2, 1], [-1, -2], [-1, 2],
-           [1, -2], [1, 2], [2, -1], [2, 1]]
+  attr_reader :offsets
 
+  def initialize(color, pos, board)
+    super
+    @offsets = [[-2, -1], [-2, 1], [-1, -2], [-1, 2],
+             [1, -2], [1, 2], [2, -1], [2, 1]]
+  end
 end
 
 class King < SteppingPiece
-  OFFSETS = [[-1, -1], [-1, 0], [-1, 1], [0, -1],
+  attr_reader :offsets
+  def initialize(color, pos, board)
+    super
+    @offsets = [[-1, -1], [-1, 0], [-1, 1], [0, -1],
              [0, 1], [1, -1], [1, 0], [1, 1]]
+  end
 
 end
