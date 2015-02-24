@@ -18,9 +18,16 @@ class SlidingPiece < Piece
     x, y = pos
     dx, dy = direction
     new_pos = x + dx, y + dy
-
-    return [pos] if new_pos.min < 0 || new_pos.max > 7
-    [pos] + directional_diff(new_pos, direction)
+    
+    if new_pos.min < 0 || new_pos.max > 7
+      return [pos]
+    elsif @board[new_pos].nil?
+      [pos] + directional_diff(new_pos, direction)
+    elsif @board[new_pos].color != @color
+      [pos] + [new_pos]
+    else
+      [pos]
+    end
   end
 
   def get_dirs

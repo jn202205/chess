@@ -5,10 +5,12 @@ class SteppingPiece < Piece
 
   def valid_moves(pos)
     x, y = pos
-    get_diffs.map do |offset|
+    reachable_moves = get_diffs.map do |offset|
       dx, dy = offset
       [dx + x, dy + y]
     end.select { |pos| pos.min.between?(0, 7) && pos.min.between?(0, 7) }
+
+    reachable_moves.select {|pos| @board[pos].nil? || @board[pos].color != @color}
   end
 
   def get_diffs
