@@ -1,3 +1,5 @@
+require 'colorize'
+
 class Board
 
 
@@ -14,6 +16,17 @@ class Board
   def []=(pos, piece)
     x, y = pos
     @grid[x][y] = piece
+  end
+
+  def render
+    @grid.each do |row|
+      row.each do |pos|
+        print pos.nil? ? '|_ ' : '|' + pos.show + ' '
+      end
+      puts "|"
+    end
+
+    nil
   end
 
 end

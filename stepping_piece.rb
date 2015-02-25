@@ -26,6 +26,10 @@ class Knight < SteppingPiece
     @offsets = [[-2, -1], [-2, 1], [-1, -2], [-1, 2],
              [1, -2], [1, 2], [2, -1], [2, 1]]
   end
+
+  def show
+    '♞'.colorize(@color)
+  end
 end
 
 class King < SteppingPiece
@@ -34,6 +38,10 @@ class King < SteppingPiece
     super
     @offsets = [[-1, -1], [-1, 0], [-1, 1], [0, -1],
              [0, 1], [1, -1], [1, 0], [1, 1]]
+  end
+
+  def show
+    '♚'.colorize(@color)
   end
 
 end

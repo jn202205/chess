@@ -1,11 +1,10 @@
 require_relative 'piece'
-require 'byebug'
+
 
 class SlidingPiece < Piece
 
 
   def valid_moves(pos)
-    # debugger
     all_valid_moves = []
     get_dirs.each do |direction|
       all_valid_moves += directional_diff(pos, direction)
@@ -18,7 +17,7 @@ class SlidingPiece < Piece
     x, y = pos
     dx, dy = direction
     new_pos = x + dx, y + dy
-    
+
     if new_pos.min < 0 || new_pos.max > 7
       return [pos]
     elsif @board[new_pos].nil?
@@ -42,6 +41,10 @@ class Bishop < SlidingPiece
     super
     @directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]]
   end
+
+  def show
+    '♝'.colorize(@color)
+  end
 end
 
 class Rook < SlidingPiece
@@ -50,6 +53,10 @@ class Rook < SlidingPiece
     super
     @directions = [[-1, 0], [0, -1], [0, 1], [1, 0]]
   end
+
+  def show
+    '♜'.colorize(@color)
+  end
 end
 
 class Queen < SlidingPiece
@@ -57,5 +64,9 @@ class Queen < SlidingPiece
   def initialize(color, pos, board)
     super
     @directions = [[-1, 0], [0, -1], [0, 1], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
+  end
+
+  def show
+    '♛'.colorize(@color)
   end
 end
