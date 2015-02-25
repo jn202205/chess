@@ -1,9 +1,19 @@
 require 'colorize'
+require_relative 'pieces'
 
 class Board
 
   def initialize
     @grid = Array.new(8) { Array.new(8) }
+  end
+
+  def setup_board
+    setup_pawns
+    setup_rooks
+    setup_bishops
+    setup_knights
+    setup_queens
+    setup_kings
   end
 
   def in_check?(color)
@@ -63,7 +73,7 @@ class Board
     nil
   end
 
-  # private TODO: Uncomment after testing
+  # private TODO: place in private after testing
 
   def []=(pos, piece)
     x, y = pos
@@ -72,6 +82,62 @@ class Board
       piece.pos = pos
       piece.board = self
     end
+  end
+
+  private
+
+  def setup_pawns
+    @grid[1].each_with_index do |pawn, index|
+      pawn = Pawn.new(:blue)
+      self[[1, index]] = pawn
+    end
+
+    @grid[6].each_with_index do |pawn, index|
+      pawn = Pawn.new(:red)
+      self[[6, index]] = pawn
+    end
+  end
+
+  def setup_rooks
+    [[0, 0], [0, 7]].each do |pos|
+      self[pos] = Rook.new(:blue)
+    end
+
+    [[7, 0], [7, 7]].each do |pos|
+      self[pos] = Rook.new(:red)
+    end
+  end
+
+  def setup_bishops
+    [[0, 1], [0, 6]].each do |pos|
+      self[pos] = Bishop.new(:blue)
+    end
+
+    [[7, 1], [7, 6]].each do |pos|
+      self[pos] = Bishop.new(:red)
+    end
+  end
+
+  def setup_knights
+    [[0, 2], [0, 5]].each do |pos|
+      self[pos] = Knight.new(:blue)
+    end
+
+    [[7, 2], [7, 5]].each do |pos|
+      self[pos] = Knight.new(:red)
+    end
+  end
+
+  def setup_queens
+    self[[0, 3]] = Queen.new(:blue)
+
+    self[[7, 3]] = Queen.new(:red)
+  end
+
+  def setup_kings
+    self[[0, 4]] = King.new(:blue)
+
+    self[[7, 4]] = King.new(:red)
   end
 
 end
