@@ -14,17 +14,20 @@ class Board
     setup_knights
     setup_queens
     setup_kings
+
+    nil
+  end
+
+  def pieces
+    @grid.flatten.compact
   end
 
   def in_check?(color)
-    @grid.each do |row|
-      row.each do |piece|
-        unless piece.nil?
-          piece.moves.each do |move|
-            if self[move].is_a?(King) && self[move].color == color
-              return true
-            end
-          end
+    enemies = pieces.select { |piece| piece.color != color }
+    enemies.each do |enemy|
+      enemy.potential_moves.each do |move|
+        if self[move].is_a?(King)
+          return true
         end
       end
     end
@@ -40,9 +43,14 @@ class Board
     elsif !self[start_pos].moves.include?(end_pos)
       raise ArgumentError.new("Invalid move")
     end
+    move!(start_pos, end_pos)
+  end
 
+  def move!(start_pos, end_pos)
+    return if start_pos == end_pos
 
     self[end_pos] = self[start_pos]
+    self[end_pos].pos = end_pos
     self[start_pos] = nil
     self[end_pos].moved = true
   end
@@ -50,7 +58,7 @@ class Board
   def dup
     duped_board = Board.new
     @grid.flatten.compact.each do |piece|
-      duped_board[piece.pos] = piece.class.new(piece.color, piece.pos, duped_board)
+      duped_board[piece.pos] = piece.class.new(piece.color, piece.pos.dup, duped_board)
     end
     duped_board
   end
@@ -79,8 +87,8 @@ class Board
     x, y = pos
     @grid[x][y] = piece
     unless piece.nil?
-      piece.pos = pos
       piece.board = self
+      piece.pos = pos
     end
   end
 
