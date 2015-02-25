@@ -12,6 +12,12 @@ class Pawn < Piece
     forward_moves(pos, vertical_direction) + attacking_moves(pos, vertical_direction)
   end
 
+  def show
+    '♟'.colorize(@color)
+  end
+
+  private
+
   def attacking_moves(pos, vertical_direction)
     row, col = pos
     diagonal_lt = [row + vertical_direction, col - 1]
@@ -25,7 +31,7 @@ class Pawn < Piece
 
   def forward_moves(pos, vertical_direction)
     row, col = pos
-    raise ArgumentError.new("Invalid move: Can't move off board") if row + vertical_direction
+    raise ArgumentError.new("Invalid move: Can't move off board") unless (row + vertical_direction).between?(0, 7)
 
     front = @board[[row + vertical_direction, col]]
     forward_moves = []
@@ -36,8 +42,5 @@ class Pawn < Piece
 
     forward_moves
   end
-
-  def show
-    '♟'.colorize(@color)
-  end
+  
 end
