@@ -8,8 +8,8 @@ class SteppingPiece < Piece
     reachable_moves = get_diffs.map do |offset|
       dx, dy = offset
       [dx + x, dy + y]
-    end.select { |pos| pos.min.between?(0, 7) && pos.min.between?(0, 7) }
-
+    end.select { |pos| pos.min.between?(0, 7) && pos.max.between?(0, 7) }
+    # debugger
     reachable_moves.select {|pos| @board[pos].nil? || @board[pos].color != @color}
   end
 
