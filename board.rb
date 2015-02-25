@@ -4,8 +4,6 @@ class Board
 
   def initialize
     @grid = Array.new(8) { Array.new(8) }
-
-    nil
   end
 
   def in_check?(color)
@@ -25,14 +23,28 @@ class Board
   end
 
   def move(start_pos, end_pos)
-    if self[start_pos] == nil
+    if self[start_pos].nil?
       raise ArgumentError.new("No piece to move at #{start_pos}!")
-    elsif self[start_pos].color == self[end_pos].color
+    elsif !self[end_pos].nil? && self[start_pos].color == self[end_pos].color
       raise ArgumentError.new("Can't move a piece on top of another")
-    elsif self[start_pos].moves.include?(end_pos)
-      self[end_pos] = self[start_pos]
-      self[start_pos] = nil
+    elsif !self[start_pos].moves.include?(end_pos)
+      raise ArgumentError.new("Invalid move")
     end
+
+    self[end_pos] = self[start_pos]
+    self[start_pos] = nil
+  end
+
+  def dup
+    duped_board = Board.new
+    @grid.each_with_index do |row, i|
+      row.each_with_index do |pos, j|
+        unless pos.nil?
+          duped_board[[i,j]] = pos.class.new(pos.color, pos.pos, duped_board)
+        end
+      end
+    end
+    duped_board
   end
 
   def [](pos)
@@ -43,6 +55,8 @@ class Board
   def []=(pos, piece)
     x, y = pos
     @grid[x][y] = piece
+    piece.pos = pos unless piece.nil?
+    piece.board = self
   end
 
   def render
