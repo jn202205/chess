@@ -40,7 +40,7 @@ class Board
     @grid.each_with_index do |row, i|
       row.each_with_index do |pos, j|
         unless pos.nil?
-          duped_board[[i,j]] = pos.class.new(pos.color, pos.pos, duped_board)
+          duped_board[[i, j]] = pos.class.new(pos.color, pos.pos, duped_board)
         end
       end
     end
@@ -55,8 +55,10 @@ class Board
   def []=(pos, piece)
     x, y = pos
     @grid[x][y] = piece
-    piece.pos = pos unless piece.nil?
-    piece.board = self
+    unless piece.nil?
+      piece.pos = pos
+      piece.board = self
+    end
   end
 
   def render
