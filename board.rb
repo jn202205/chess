@@ -52,15 +52,6 @@ class Board
     @grid[x][y]
   end
 
-  def []=(pos, piece)
-    x, y = pos
-    @grid[x][y] = piece
-    unless piece.nil?
-      piece.pos = pos
-      piece.board = self
-    end
-  end
-
   def render
     puts "   0  1  2  3  4  5  6  7"
     @grid.each_with_index do |row, index|
@@ -72,6 +63,17 @@ class Board
     end
 
     nil
+  end
+
+  private
+
+  def []=(pos, piece)
+    x, y = pos
+    @grid[x][y] = piece
+    unless piece.nil?
+      piece.pos = pos
+      piece.board = self
+    end
   end
 
 end
