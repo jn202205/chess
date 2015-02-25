@@ -1,5 +1,6 @@
 require 'colorize'
 require_relative 'pieces'
+require 'byebug'
 
 class Board
 
@@ -20,6 +21,14 @@ class Board
 
   def pieces
     @grid.flatten.compact
+  end
+
+  def color(color)
+    pieces.select { |piece| piece.color == color }
+  end
+
+  def in_checkmate?(color)
+    self.color(color).all? { |piece| piece.moves.empty? }
   end
 
   def in_check?(color)
@@ -65,6 +74,9 @@ class Board
 
   def [](pos)
     x, y = pos
+    if @grid[x].nil?
+      # debugger
+    end
     @grid[x][y]
   end
 
