@@ -3,7 +3,7 @@ require_relative 'piece'
 
 class SteppingPiece < Piece
 
-  def valid_moves(pos)
+  def potential_moves
     x, y = pos
     reachable_moves = get_diffs.map do |offset|
       dx, dy = offset

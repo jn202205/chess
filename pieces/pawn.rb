@@ -6,8 +6,8 @@ class Pawn < Piece
     super
   end
 
-  def valid_moves(pos)
-    vertical_direction = (@color == :blue) ? 1 : -1
+  def potential_moves
+    vertical_direction = ((@color == :blue) ? 1 : -1)
 
     forward_moves(pos, vertical_direction) + attacking_moves(pos, vertical_direction)
   end
@@ -31,7 +31,7 @@ class Pawn < Piece
 
   def forward_moves(pos, vertical_direction)
     row, col = pos
-    raise ArgumentError.new("Invalid move: Can't move off board") unless (row + vertical_direction).between?(0, 7)
+    # raise ArgumentError.new("Invalid move: Can't move off board") unless (row + vertical_direction).between?(0, 7)
     forward_moves = []
     front = [row + vertical_direction, col]
     two_forward = [row + vertical_direction * 2, col]

@@ -1,5 +1,5 @@
 require 'colorize'
-
+require 'byebug'
 
 class Piece
   attr_reader :color
@@ -13,7 +13,16 @@ class Piece
   end
 
   def moves
-    valid_moves(@pos)
+    valid_moves
+  end
+
+  def valid_moves
+    # debugger
+    potential_moves.select do |move|
+      duped_board = @board.dup
+      duped_board.move!(@pos, move)
+      !duped_board.in_check?(@color)
+    end
   end
 
   def moved?

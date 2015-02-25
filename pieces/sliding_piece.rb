@@ -4,7 +4,7 @@ require_relative 'piece'
 class SlidingPiece < Piece
 
 
-  def valid_moves(pos)
+  def potential_moves
     all_valid_moves = []
     get_dirs.each do |direction|
       all_valid_moves += directional_diff(pos, direction)
