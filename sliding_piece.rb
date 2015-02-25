@@ -37,7 +37,7 @@ end
 class Bishop < SlidingPiece
 
   attr_reader :directions
-  def initialize(color, pos, board)
+  def initialize(color, pos = nil, board = nil)
     super
     @directions = [[-1, -1], [-1, 1], [1, -1], [1, 1]]
   end
@@ -49,7 +49,7 @@ end
 
 class Rook < SlidingPiece
   attr_reader :directions
-  def initialize(color, pos, board)
+  def initialize(color, pos = nil, board = nil)
     super
     @directions = [[-1, 0], [0, -1], [0, 1], [1, 0]]
   end
@@ -61,7 +61,7 @@ end
 
 class Queen < SlidingPiece
   attr_reader :directions
-  def initialize(color, pos, board)
+  def initialize(color, pos = nil, board = nil)
     super
     @directions = [[-1, 0], [0, -1], [0, 1], [1, 0], [-1, -1], [-1, 1], [1, -1], [1, 1]]
   end

@@ -39,12 +39,8 @@ class Board
 
   def dup
     duped_board = Board.new
-    @grid.each_with_index do |row, i|
-      row.each_with_index do |pos, j|
-        unless pos.nil?
-          duped_board[[i, j]] = pos.class.new(pos.color, pos.pos, duped_board)
-        end
-      end
+    @grid.flatten.compact.each do |piece|
+      duped_board[piece.pos] = piece.class.new(piece.color, piece.pos, duped_board)
     end
     duped_board
   end

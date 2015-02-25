@@ -21,7 +21,7 @@ end
 class Knight < SteppingPiece
   attr_reader :offsets
 
-  def initialize(color, pos, board)
+  def initialize(color, pos = nil, board = nil)
     super
     @offsets = [[-2, -1], [-2, 1], [-1, -2], [-1, 2],
              [1, -2], [1, 2], [2, -1], [2, 1]]
@@ -34,7 +34,7 @@ end
 
 class King < SteppingPiece
   attr_reader :offsets
-  def initialize(color, pos, board)
+  def initialize(color, pos = nil, board = nil)
     super
     @offsets = [[-1, -1], [-1, 0], [-1, 1], [0, -1],
              [0, 1], [1, -1], [1, 0], [1, 1]]
