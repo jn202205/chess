@@ -3,6 +3,7 @@ require_relative 'pieces'
 require 'byebug'
 
 class Board
+  BACKPIECES = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
 
   def initialize
     @grid = Array.new(8) { Array.new(8) }
@@ -10,13 +11,7 @@ class Board
 
   def setup_board
     setup_pawns
-    setup_rooks
-    setup_bishops
-    setup_knights
-    setup_queens
-    setup_kings
-
-    nil
+    setup_backrows
   end
 
   def pieces
@@ -35,9 +30,7 @@ class Board
     enemies = pieces.select { |piece| piece.color != color }
     enemies.each do |enemy|
       enemy.potential_moves.each do |move|
-        if self[move].is_a?(King)
-          return true
-        end
+        return true if self[move].is_a?(King)
       end
     end
 
@@ -74,9 +67,6 @@ class Board
 
   def [](pos)
     x, y = pos
-    if @grid[x].nil?
-      # debugger
-    end
     @grid[x][y]
   end
 
@@ -93,7 +83,7 @@ class Board
     nil
   end
 
-  # private TODO: place in private after testing
+  private
 
   def []=(pos, piece)
     x, y = pos
@@ -103,8 +93,6 @@ class Board
       piece.pos = pos
     end
   end
-
-  private
 
   def setup_pawns
     @grid[1].each_with_index do |pawn, index|
@@ -117,47 +105,18 @@ class Board
       self[[6, index]] = pawn
     end
   end
+  #
 
-  def setup_rooks
-    [[0, 0], [0, 7]].each do |pos|
-      self[pos] = Rook.new(:blue)
+  def setup_backrows
+    @grid[0].each_with_index do |piece, index|
+      piece = BACKPIECES[index].new(:blue)
+      self[[0, index]] = piece
     end
 
-    [[7, 0], [7, 7]].each do |pos|
-      self[pos] = Rook.new(:red)
+    @grid[7].each_with_index do |piece, index|
+      piece = BACKPIECES[index].new(:red)
+      self[[7, index]] = piece
     end
-  end
-
-  def setup_bishops
-    [[0, 1], [0, 6]].each do |pos|
-      self[pos] = Bishop.new(:blue)
-    end
-
-    [[7, 1], [7, 6]].each do |pos|
-      self[pos] = Bishop.new(:red)
-    end
-  end
-
-  def setup_knights
-    [[0, 2], [0, 5]].each do |pos|
-      self[pos] = Knight.new(:blue)
-    end
-
-    [[7, 2], [7, 5]].each do |pos|
-      self[pos] = Knight.new(:red)
-    end
-  end
-
-  def setup_queens
-    self[[0, 3]] = Queen.new(:blue)
-
-    self[[7, 3]] = Queen.new(:red)
-  end
-
-  def setup_kings
-    self[[0, 4]] = King.new(:blue)
-
-    self[[7, 4]] = King.new(:red)
   end
 
 end
