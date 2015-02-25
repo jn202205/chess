@@ -31,8 +31,10 @@ class Board
       raise ArgumentError.new("Invalid move")
     end
 
+
     self[end_pos] = self[start_pos]
     self[start_pos] = nil
+    self[end_pos].moved = true
   end
 
   def dup
@@ -65,7 +67,7 @@ class Board
     nil
   end
 
-  private
+  # private TODO: Uncomment after testing
 
   def []=(pos, piece)
     x, y = pos

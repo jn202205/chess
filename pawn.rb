@@ -32,15 +32,21 @@ class Pawn < Piece
   def forward_moves(pos, vertical_direction)
     row, col = pos
     raise ArgumentError.new("Invalid move: Can't move off board") unless (row + vertical_direction).between?(0, 7)
-
-    front = @board[[row + vertical_direction, col]]
     forward_moves = []
+    front = [row + vertical_direction, col]
+    two_forward = [row + vertical_direction * 2, col]
 
-    if front.nil?
-      forward_moves << [row + vertical_direction, col]
+    if @board[front].nil?
+      forward_moves << front
+    end
+
+    unless self.moved?
+      if @board[front].nil? && @board[two_forward].nil?
+        forward_moves << two_forward
+      end
     end
 
     forward_moves
   end
-  
+
 end
