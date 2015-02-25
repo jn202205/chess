@@ -60,7 +60,9 @@ class Board
   end
 
   def render
-    @grid.each do |row|
+    puts "   0  1  2  3  4  5  6  7"
+    @grid.each_with_index do |row, index|
+      print "#{index} "
       row.each do |pos|
         print pos.nil? ? '|_ ' : '|' + pos.show + ' '
       end
