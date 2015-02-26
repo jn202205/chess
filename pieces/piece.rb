@@ -9,7 +9,7 @@ class Piece
     @color = color
     @pos = pos
     @board = board
-    @moved = false #TODO: trigger
+    @moved = false
   end
 
   def moves
@@ -27,8 +27,4 @@ class Piece
   def moved?
     @moved
   end
-
-end
-
-class Pawn < Piece
 end

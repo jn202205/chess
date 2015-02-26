@@ -17,10 +17,7 @@ class Chess
         from, to = user_input
         check_turn(from, @turn)
         @board.move(from, to)
-      rescue WrongTurnError => e
-        puts e.message
-        retry
-      rescue RuntimeError => e
+      rescue WrongTurnError, RuntimeError => e
         puts e.message
         retry
       end
@@ -75,7 +72,7 @@ class Chess
   end
 
   def get_input
-    input = gets.chomp.split("").reverse
+    input = gets.chomp.downcase.split("").reverse
     raise InputError.new("Input must be two characters") if input.length != 2
     input[1] = input[1].ord - 97
     input[0] = 8 - input[0].to_i

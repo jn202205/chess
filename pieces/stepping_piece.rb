@@ -9,8 +9,8 @@ class SteppingPiece < Piece
       dx, dy = offset
       [dx + x, dy + y]
     end.select { |pos| pos.min.between?(0, 7) && pos.max.between?(0, 7) }
-    # debugger
-    reachable_moves.select {|pos| @board[pos].nil? || @board[pos].color != @color}
+
+    reachable_moves.select { |pos| @board[pos].nil? || @board[pos].color != @color }
   end
 
   def get_diffs
@@ -24,7 +24,7 @@ class Knight < SteppingPiece
   def initialize(color, pos = nil, board = nil)
     super
     @offsets = [[-2, -1], [-2, 1], [-1, -2], [-1, 2],
-             [1, -2], [1, 2], [2, -1], [2, 1]]
+                [1, -2], [1, 2], [2, -1], [2, 1]]
   end
 
   def show
@@ -37,11 +37,10 @@ class King < SteppingPiece
   def initialize(color, pos = nil, board = nil)
     super
     @offsets = [[-1, -1], [-1, 0], [-1, 1], [0, -1],
-             [0, 1], [1, -1], [1, 0], [1, 1]]
+                [0, 1], [1, -1], [1, 0], [1, 1]]
   end
 
   def show
     '♚'.colorize(@color)
   end
-
 end

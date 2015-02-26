@@ -104,7 +104,7 @@ class Board
   end
 
   private
-
+  
   def setup_pawns
     @grid[1].each_with_index do |pawn, index|
       pawn = Pawn.new(:blue)
