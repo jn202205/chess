@@ -1,11 +1,13 @@
 require_relative 'board'
 
 class InputError < StandardError; end
+class WrongTurnError < StandardError; end
 
 class Chess
   def initialize
     @board = Board.new
     @board.setup_board
+    @turn = :red
   end
 
   def play
@@ -13,23 +15,33 @@ class Chess
       begin
         @board.render
         from, to = user_input
+        check_turn(from, @turn)
         @board.move(from, to)
-
+      rescue WrongTurnError => e
+        puts e.message
+        retry
       rescue RuntimeError => e
         puts e.message
         retry
       end
+
+      @turn = ((@turn == :red) ? :blue : :red)
     end
 
-    winner = @board.winner?
-    if winner
-      puts "Congratulations, #{winner.capitalize}"
-    else
-      puts "Stalemate!"
-    end
+    game_over
   end
 
   private
+
+  def game_over
+    winner = @board.winner?
+    if winner
+      puts "Congratulations, #{winner.capitalize}!"
+    else
+      puts "Stalemate!"
+    end
+    @board.render
+  end
 
   def over?
     checkmate = @board.in_checkmate?(:blue) || @board.in_checkmate?(:red)
@@ -37,14 +49,20 @@ class Chess
     checkmate || stalemate
   end
 
+  def check_turn(pos, color)
+    unless @board[pos].color == color
+      raise WrongTurnError.new "Not your turn!"
+    end
+  end
+
   def user_input
     begin
-      print "Piece starting position:"
+      print "Piece starting position:".colorize(@turn)
       start_pos = get_input
 
       check_input(start_pos)
 
-      print "Piece ending position:"
+      print "Piece ending position:".colorize(@turn)
       end_pos = get_input
 
       check_input(end_pos)
@@ -58,6 +76,7 @@ class Chess
 
   def get_input
     input = gets.chomp.split("").reverse
+    raise InputError.new("Input must be two characters") if input.length != 2
     input[1] = input[1].ord - 97
     input[0] = 8 - input[0].to_i
 
@@ -70,4 +89,8 @@ class Chess
     end
   end
 
+end
+
+if __FILE__ == $PROGRAM_NAME
+  Chess.new.play
 end
