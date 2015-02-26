@@ -17,7 +17,6 @@ class Piece
   end
 
   def valid_moves
-    # debugger
     potential_moves.select do |move|
       duped_board = @board.dup
       duped_board.move!(@pos, move)

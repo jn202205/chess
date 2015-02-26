@@ -1,5 +1,7 @@
 require_relative 'board'
 
+class InputError < StandardError; end
+
 class Chess
   def initialize
     @board = Board.new
@@ -8,23 +10,64 @@ class Chess
 
   def play
     until over?
-      @board.render
-      from, to = user_input
-      @board.move(from, to)
+      begin
+        @board.render
+        from, to = user_input
+        @board.move(from, to)
+
+      rescue RuntimeError => e
+        puts e.message
+        retry
+      end
+    end
+
+    winner = @board.winner?
+    if winner
+      puts "Congratulations, #{winner.capitalize}"
+    else
+      puts "Stalemate!"
     end
   end
 
+  private
+
   def over?
-    @board.in_checkmate?(:blue) || @board.in_checkmate?(:red)
+    checkmate = @board.in_checkmate?(:blue) || @board.in_checkmate?(:red)
+    stalemate = @board.in_stalemate?(:blue) || @board.in_stalemate?(:red)
+    checkmate || stalemate
   end
 
   def user_input
-    print "Piece starting position:"
-    start_pos = gets.chomp.split(",").map(&:to_i).reverse
+    begin
+      print "Piece starting position:"
+      start_pos = get_input
 
-    print "Piece ending position:"
-    end_pos = gets.chomp.split(",").map(&:to_i).reverse
+      check_input(start_pos)
 
-    [start_pos, end_pos]
+      print "Piece ending position:"
+      end_pos = get_input
+
+      check_input(end_pos)
+
+    rescue InputError => e
+      puts e.message
+      retry
+    end
+    [start_pos.map(&:to_i), end_pos.map(&:to_i)]
   end
+
+  def get_input
+    input = gets.chomp.split("").reverse
+    input[1] = input[1].ord - 97
+    input[0] = 8 - input[0].to_i
+
+    input
+  end
+
+  def check_input(input)
+    unless input.all? { |el| el.between?(0, 7) }
+      raise InputError.new ("Invalid input, must be letter number (i.e. f7)")
+    end
+  end
+
 end
