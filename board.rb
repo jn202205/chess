@@ -1,6 +1,5 @@
 require 'colorize'
 require_relative 'pieces'
-require 'byebug'
 
 class Board
   BACKPIECES = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
@@ -22,8 +21,12 @@ class Board
     pieces.select { |piece| piece.color == color }
   end
 
-  def in_checkmate?(color)
+  def in_stalemate?(color)
     self.color(color).all? { |piece| piece.moves.empty? }
+  end
+
+  def in_checkmate?(color)
+    in_check?(color) && in_stalemate?(color)
   end
 
   def in_check?(color)
@@ -37,13 +40,18 @@ class Board
     false
   end
 
+  def winner?
+    return :blue if in_checkmate?(:red)
+    return :red if in_checkmate?(:blue)
+  end
+
   def move(start_pos, end_pos)
     if self[start_pos].nil?
-      raise ArgumentError.new("No piece to move at #{start_pos}!")
+      raise RuntimeError.new("No piece to move at #{start_pos}!")
     elsif !self[end_pos].nil? && self[start_pos].color == self[end_pos].color
-      raise ArgumentError.new("Can't move a piece on top of another")
+      raise RuntimeError.new("Can't move a piece on top of another")
     elsif !self[start_pos].moves.include?(end_pos)
-      raise ArgumentError.new("Invalid move")
+      raise RuntimeError.new("Invalid move")
     end
     move!(start_pos, end_pos)
   end
@@ -70,21 +78,6 @@ class Board
     @grid[x][y]
   end
 
-  def render
-    puts "   0  1  2  3  4  5  6  7"
-    @grid.each_with_index do |row, index|
-      print "#{index} "
-      row.each do |pos|
-        print pos.nil? ? '|_ ' : '|' + pos.show + ' '
-      end
-      puts "|"
-    end
-
-    nil
-  end
-
-  private
-
   def []=(pos, piece)
     x, y = pos
     @grid[x][y] = piece
@@ -93,6 +86,24 @@ class Board
       piece.pos = pos
     end
   end
+
+  def render
+    @grid.each_with_index do |row, i|
+      print "#{8 - i} "
+      row.each_with_index do |col, j|
+        background = ((i + j).even? ? :white : :black)
+        if col.nil?
+          print "   ".colorize(:background => background)
+        else
+          print " #{col.show} ".colorize(:background => background)
+        end
+      end
+      puts
+    end
+    puts  "   a  b  c  d  e  f  g  h"
+  end
+
+  private
 
   def setup_pawns
     @grid[1].each_with_index do |pawn, index|
@@ -105,7 +116,6 @@ class Board
       self[[6, index]] = pawn
     end
   end
-  #
 
   def setup_backrows
     @grid[0].each_with_index do |piece, index|
