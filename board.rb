@@ -1,5 +1,7 @@
 require 'colorize'
 require_relative 'pieces'
+require 'byebug'
+
 
 class Board
   BACKPIECES = [Rook, Knight, Bishop, Queen, King, Bishop, Knight, Rook]
@@ -100,32 +102,26 @@ class Board
       end
       puts
     end
-    puts  "   a  b  c  d  e  f  g  h"
+    puts "   a  b  c  d  e  f  g  h"
   end
 
   private
-  
-  def setup_pawns
-    @grid[1].each_with_index do |pawn, index|
-      pawn = Pawn.new(:blue)
-      self[[1, index]] = pawn
-    end
 
-    @grid[6].each_with_index do |pawn, index|
-      pawn = Pawn.new(:red)
-      self[[6, index]] = pawn
+  def setup_pawns
+    [1, 6].each do |i|
+      color = i == 1 ? :blue : :red
+      @grid[i].each_index do |j|
+        self[[i, j]] = Pawn.new(color)
+      end
     end
   end
 
   def setup_backrows
-    @grid[0].each_with_index do |piece, index|
-      piece = BACKPIECES[index].new(:blue)
-      self[[0, index]] = piece
-    end
-
-    @grid[7].each_with_index do |piece, index|
-      piece = BACKPIECES[index].new(:red)
-      self[[7, index]] = piece
+    [0, 7].each do |i|
+      color = i == 0 ? :blue : :red
+      @grid[i].each_index do |j|
+        self[[i, j]] = BACKPIECES[j].new(color)
+      end
     end
   end
 

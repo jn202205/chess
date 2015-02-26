@@ -48,7 +48,7 @@ class Chess
 
   def check_turn(pos, color)
     unless @board[pos].color == color
-      raise WrongTurnError.new "Not your turn!"
+      raise WrongTurnError.new 'Not your turn!'
     end
   end
 
